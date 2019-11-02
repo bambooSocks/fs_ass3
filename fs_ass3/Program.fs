@@ -1,4 +1,6 @@
-﻿
+﻿// Third Assignemnt for course 02157 Functional programming
+// Mihaela-Elena Nistor - s183190, Matej Majtan - s184457
+
 type ExprTree = | Const of int
                 | Ident of string
                 | Sum of ExprTree * ExprTree
@@ -86,4 +88,3 @@ let subst2 x n t =
         substAux2 x n t
     else
         t
-
