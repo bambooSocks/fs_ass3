@@ -83,3 +83,59 @@ let subst2 x n t =
         substAux2 x n t
     else
         t
+
+//tests ex2
+
+// result : [3;3]
+let test1 = constList (Let ("a", Const 3 ,Sum (Ident "a", Const 3) )) 
+//result : [3]
+let test2 = constList (Sum(Ident "x",Const 3))
+//result : [3]
+let test3 = constList (Const 3)
+//result []
+let test4 = constList (Ident "x")
+
+//tests ex3
+//result : []
+let test5 = extractFreeIdent (Let ("x", Sum(Const 2,Ident "x"), Sum(Ident "x",Const 3))) Set.empty
+//result: [Ident "y"]
+let test6 = extractFreeIdent (Let ("x", Sum(Const 2,Ident "x"), Sum(Ident "y",Const 3))) Set.empty
+//result  [Ident "y"]
+let test7 = extractFreeIdent (Let ("x", Sum(Const 2,Ident "x"), Sum(Ident "y",Const 3))) Set.empty
+//result : []
+let test8 = extractFreeIdent (Let("x", Const 2, Sum(Ident "x", Ident "x"))) Set.empty
+//result : []
+let test9 = (Set.ofList [Ident "z"]) extractFreeIdent (Let("x", Const 2, Sum(Ident "x", Ident "x"))) 
+
+
+
+//tests ex4
+
+//result: (Sum(Const 2,Const 3))
+let test10 = subst "x" 3 (Sum(Const 2,Ident "x"))
+//result : Let("x", Const 2, Sum(Const 3, Const 3))
+let test11 = subst "x" 3 (Let("x", Const 2, Sum(Ident "x", Ident "x")))
+//result : Let("x", Sum(Const 3, Const 3),Sum(Ident "y", Ident "y")))
+let test12 = subst "x" 3 (Let("x", Sum(Ident "x", Ident "x"),Sum(Ident "y", Ident "y")))
+
+//tests Exercise 5
+
+//tests constFind 
+// checks if the last branch of the function is executed and returns [2;3;3;3]
+let test13= constList2 (App("h", [Const 2; Ident "x"; Const 3;Let ("a", Const 3 ,Sum (Ident "a", Const 3) )]))
+// checks if the last branch of the function is executed and returns [2;20;3;3]
+let test14= constList2 (App("h", [Const 2; Ident "x";  Sum(Const 20,Ident "x");Let ("a", Const 3 ,Sum (Ident "a", Const 3) )])) 
+
+//tests freeIdent
+//checks if the last branch of the function is executed and returns a list containing the elements Ident "x"; Ident "b"
+//set.union does not preserve the initial order of the identifiers occuring in the tree
+let test15 = extractFreeIdent2 (App("h", [Const 2; Ident "x"; Const 3;Let ("a", Const 3 ,Sum (Ident "b", Const 3) )])) (Set.ofList [])
+//checks if the last branch of the function is executed and returns a list containing the elements Ident "x", Ident "b", Ident "y" and Ident "z"
+//set.union does not preserve the initial order of the identifiers occuring in the tree
+let test16 = extractFreeIdent2 (App("h", [Const 2; Ident "x"; Const 3;Sum(Sum(Ident "x",Ident "y"),Sum(Ident "z",Ident "z"));Let ("a", Const 3 ,Sum (Ident "b", Const 3) )])) (Set.ofList [])
+//tests subst 
+//checks if the last branch of the function is executed and returns  App("h", [Const 2; Const 10; Const 3;Let ("a", Const 3 ,Sum (Const 10, Const 3) )])
+let test17 = subst2 "x" 10 (App("h", [Const 2; Ident "x"; Const 3;Let ("a", Const 3 ,Sum (Ident "x", Const 3) )])) 
+//checks if the last branch of the function is executed and returns 
+// App("h",[Const 2; Const 25; Const 3;Sum (Sum (Const 25,Ident "y"),Sum (Ident "z",Const 25));Let ("a",Const 3,Sum (Const 25,Const 3))])
+let test18= subst2 "x" 25  (App("h", [Const 2; Ident "x"; Const 3;Sum(Sum(Ident "x",Ident "y"),Sum(Ident "z",Ident "x"));Let ("a", Const 3 ,Sum (Ident "x", Const 3) )]))
