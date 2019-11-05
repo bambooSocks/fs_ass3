@@ -79,6 +79,10 @@ let test9 = freeIdent (Let("x", Const 2, Sum(Ident "x", Ident "x"))) (Set.ofList
 let test10 = subst "x" 3 (Sum(Const 2,Ident "x"))
 let test11 = subst "x" 3 (Let("x", Const 2, Sum(Ident "x", Ident "x")))
 let test12 = subst "x" 3 (Let("x", Sum(Ident "x", Ident "x"),Sum(Ident "y", Ident "y")))
+
+
+
+
 [<EntryPoint>]
 let main argv =
     printfn " The result is %A" test11

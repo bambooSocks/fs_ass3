@@ -21,17 +21,13 @@ let rec constList = function
     | Sum (e1, e2)    -> constList e1 @ constList e2
     | Let (_, e1, e2) -> constList e1 @ constList e2 
 
-constList l2
-
 // ex 3
 // extractFreeIdent: Set<ExprTree> -> ExprTree -> Set<ExprTree>
 let rec extractFreeIdent ids = function
     | Const _         -> ids
     | Ident x         -> Set.add (Ident x) ids
     | Sum (e1, e2)    -> Set.union (extractFreeIdent ids e1) (extractFreeIdent ids e2)
-    | Let (x, e1, e2) -> Set.difference (Set.union (extractFreeIdent ids e1) (extractFreeIdent ids e2)) (Set.add x Set.empty)
-    
-extractFreeIdent Set.empty l2
+    | Let (x, e1, e2) -> Set.difference (Set.union (extractFreeIdent ids e1) (extractFreeIdent ids e2)) (Set.add (Ident x) Set.empty)
 
 // ex 4
 // substAux: string -> int -> ExprTree -> ExprTree
@@ -50,7 +46,6 @@ let subst x n t =
         t
         
 // ex 5
-
 type ExprTree2 = | Const of int
                  | Ident of string
                  | Sum of ExprTree2 * ExprTree2
@@ -70,7 +65,7 @@ let rec extractFreeIdent2 ids = function
     | Const _         -> ids
     | Ident x         -> Set.add (Ident x) ids
     | Sum (e1, e2)    -> Set.union (extractFreeIdent2 ids e1) (extractFreeIdent2 ids e2)
-    | Let (x, e1, e2) -> Set.difference (Set.union (extractFreeIdent2 ids e1) (extractFreeIdent2 ids e2)) (Set.add x Set.empty)
+    | Let (x, e1, e2) -> Set.difference (Set.union (extractFreeIdent2 ids e1) (extractFreeIdent2 ids e2)) (Set.add (Ident x) Set.empty)
     | App (x, e)      -> List.foldBack (fun el acc -> extractFreeIdent2 acc el) e ids
     
 // substAux2: string -> int -> ExprTree2 -> ExprTree2

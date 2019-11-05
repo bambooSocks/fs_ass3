@@ -48,6 +48,9 @@ let test11 = subst "x" 10 (App("h", [Const 2; Ident "x"; Const 3;Let ("a", Const
 //checks if the last branch of the function is executed and returns 
 // App("h",[Const 2; Const 25; Const 3;Sum (Sum (Const 25,Ident "y"),Sum (Ident "z",Const 25));Let ("a",Const 3,Sum (Const 25,Const 3))])
 let test12= subst "x" 25  (App("h", [Const 2; Ident "x"; Const 3;Sum(Sum(Ident "x",Ident "y"),Sum(Ident "z",Ident "x"));Let ("a", Const 3 ,Sum (Ident "x", Const 3) )]))
+
+
+
 [<EntryPoint>]
 let main argv =
     printfn " The result is %A" test12
